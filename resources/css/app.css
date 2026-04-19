@@ -1,0 +1,10 @@
+
+@import "tailwindcss";
+
+@theme {
+  --color-institucional: #1E4D8C;
+  --color-institucional-light: #2E6DB4;
+  --color-institucional-dark: #153A6B;
+  --color-naranja: #F97316;
+  --color-naranja-dark: #EA6C0A;
+}
