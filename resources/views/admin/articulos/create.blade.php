@@ -63,8 +63,19 @@
                 <label style="display:block; font-size:0.875rem; font-weight:600; color:#374151; margin-bottom:0.375rem;">
                     Imagen de portada
                 </label>
-                <input type="file" name="imagen" accept="image/*" style="font-size:0.875rem; color:#374151;">
-                <p style="font-size:0.75rem; color:#9ca3af; margin:0.25rem 0 0;">JPG, PNG o WebP. Máx. 2 MB.</p>
+                <label for="imagen_input"
+                       style="display:inline-flex; align-items:center; gap:0.5rem; padding:0.5rem 1rem; background:#f3f4f6; border:1px solid #d1d5db; border-radius:0.5rem; font-size:0.875rem; font-weight:600; color:#374151; cursor:pointer;">
+                    <svg style="width:1rem;height:1rem;flex-shrink:0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>
+                    </svg>
+                    Cargar imagen
+                </label>
+                <input id="imagen_input" type="file" name="imagen"
+                       accept="image/jpeg,image/png,image/webp,image/gif"
+                       style="display:none;"
+                       onchange="document.getElementById('imagen_nombre').textContent = this.files[0] ? this.files[0].name : 'Ninguna imagen seleccionada'">
+                <p id="imagen_nombre" style="font-size:0.8rem; color:#6b7280; margin:0.4rem 0 0;">Ninguna imagen seleccionada</p>
+                <p style="font-size:0.75rem; color:#9ca3af; margin:0.15rem 0 0;">JPG, PNG, WebP o GIF · Máx. 2 MB</p>
             </div>
 
             {{-- Cuerpo --}}
