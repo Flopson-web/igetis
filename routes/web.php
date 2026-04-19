@@ -1,24 +1,28 @@
 <?php
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\HomeController;
-use App\Http\Controllers\CursoController;
-use App\Http\Controllers\BlogController;
-use App\Http\Controllers\ContactoController;
-use App\Http\Controllers\Admin\DashboardController;
-use App\Http\Controllers\Admin\CursoController as AdminCursoController;
+
 use App\Http\Controllers\Admin\ArticuloController as AdminArticuloController;
 use App\Http\Controllers\Admin\CategoriaController as AdminCategoriaController;
 use App\Http\Controllers\Admin\ConfiguracionController;
+use App\Http\Controllers\Admin\CursoController as AdminCursoController;
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\DocenteController as AdminDocenteController;
 use App\Http\Controllers\Admin\MensajeController;
+use App\Http\Controllers\BlogController;
+use App\Http\Controllers\ContactoController;
+use App\Http\Controllers\CursoController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\NosotrosController;
+use Illuminate\Support\Facades\Route;
 
 // ── Frontend público ─────────────────────────────────────────
-Route::get('/',              [HomeController::class,     'index'])->name('home');
-Route::get('/cursos',        [CursoController::class,    'index'])->name('cursos.index');
+Route::get('/', [HomeController::class,     'index'])->name('home');
+Route::get('/cursos', [CursoController::class,    'index'])->name('cursos.index');
 Route::get('/cursos/{slug}', [CursoController::class,    'show'])->name('cursos.show');
-Route::get('/blog',          [BlogController::class,     'index'])->name('blog.index');
-Route::get('/blog/{slug}',   [BlogController::class,     'show'])->name('blog.show');
-Route::get('/contacto',      [ContactoController::class, 'index'])->name('contacto.index');
-Route::post('/contacto',     [ContactoController::class, 'store'])->name('contacto.store');
+Route::get('/blog', [BlogController::class,     'index'])->name('blog.index');
+Route::get('/blog/{slug}', [BlogController::class,     'show'])->name('blog.show');
+Route::get('/nosotros', [NosotrosController::class, 'index'])->name('nosotros.index');
+Route::get('/contacto', [ContactoController::class, 'index'])->name('contacto.index');
+Route::post('/contacto', [ContactoController::class, 'store'])->name('contacto.store');
 
 // ── Panel Admin (protegido) ──────────────────────────────────
 Route::middleware(['auth'])->prefix('gestion-interna')->name('admin.')->group(function () {
@@ -30,16 +34,21 @@ Route::middleware(['auth'])->prefix('gestion-interna')->name('admin.')->group(fu
         [AdminCursoController::class, 'toggleVisibilidad']
     )->name('cursos.visibilidad');
 
-    Route::resource('articulos',  AdminArticuloController::class);
+    Route::resource('articulos', AdminArticuloController::class);
     Route::resource('categorias', AdminCategoriaController::class)
-         ->only(['index', 'store', 'destroy']);
+        ->only(['index', 'store', 'destroy']);
 
-    Route::get('configuracion',  [ConfiguracionController::class, 'index'])->name('configuracion.index');
+    Route::get('configuracion', [ConfiguracionController::class, 'index'])->name('configuracion.index');
     Route::post('configuracion', [ConfiguracionController::class, 'update'])->name('configuracion.update');
 
-    Route::get('mensajes',                   [MensajeController::class, 'index'])->name('mensajes.index');
+    Route::resource('docentes', AdminDocenteController::class)->except(['show']);
+    Route::patch('docentes/{docente}/visibilidad',
+        [AdminDocenteController::class, 'toggleVisibilidad']
+    )->name('docentes.visibilidad');
+
+    Route::get('mensajes', [MensajeController::class, 'index'])->name('mensajes.index');
     Route::patch('mensajes/{mensaje}/leido', [MensajeController::class, 'marcarLeido'])->name('mensajes.leido');
-    Route::delete('mensajes/{mensaje}',      [MensajeController::class, 'destroy'])->name('mensajes.destroy');
+    Route::delete('mensajes/{mensaje}', [MensajeController::class, 'destroy'])->name('mensajes.destroy');
 });
 
 require __DIR__.'/auth.php';

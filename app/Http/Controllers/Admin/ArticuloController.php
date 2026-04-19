@@ -28,7 +28,7 @@ class ArticuloController extends Controller
             'titulo' => ['required', 'string', 'max:255'],
             'autor' => ['required', 'string', 'max:150'],
             'cuerpo' => ['required', 'string'],
-            'imagen' => ['nullable', 'image', 'max:2048'],
+            'imagen' => ['nullable', 'image', 'mimes:jpeg,jpg,png,webp,gif', 'max:2048'],
             'publicado_en' => ['nullable', 'date'],
         ]);
 
@@ -61,7 +61,7 @@ class ArticuloController extends Controller
             'titulo' => ['required', 'string', 'max:255'],
             'autor' => ['required', 'string', 'max:150'],
             'cuerpo' => ['required', 'string'],
-            'imagen' => ['nullable', 'image', 'max:2048'],
+            'imagen' => ['nullable', 'image', 'mimes:jpeg,jpg,png,webp,gif', 'max:2048'],
             'publicado_en' => ['nullable', 'date'],
         ]);
 

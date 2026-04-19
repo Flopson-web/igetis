@@ -35,7 +35,7 @@ class CursoController extends Controller
             'duracion' => ['nullable', 'string', 'max:100'],
             'modalidad' => ['nullable', 'string', 'max:100'],
             'video_url' => ['nullable', 'url', 'max:255'],
-            'imagen' => ['nullable', 'image', 'max:2048'],
+            'imagen' => ['nullable', 'image', 'mimes:jpeg,jpg,png,webp,gif', 'max:2048'],
             'categorias' => ['nullable', 'array'],
             'categorias.*' => ['exists:categorias,id'],
         ]);
@@ -76,7 +76,7 @@ class CursoController extends Controller
             'duracion' => ['nullable', 'string', 'max:100'],
             'modalidad' => ['nullable', 'string', 'max:100'],
             'video_url' => ['nullable', 'url', 'max:255'],
-            'imagen' => ['nullable', 'image', 'max:2048'],
+            'imagen' => ['nullable', 'image', 'mimes:jpeg,jpg,png,webp,gif', 'max:2048'],
             'categorias' => ['nullable', 'array'],
             'categorias.*' => ['exists:categorias,id'],
         ]);

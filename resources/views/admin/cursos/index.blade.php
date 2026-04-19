@@ -3,84 +3,89 @@
 @section('titulo', 'Cursos')
 @section('subtitulo', 'Gestión de cursos del sitio')
 
+@section('topbar_action')
+    <a href="{{ route('admin.cursos.create') }}" class="topbar-btn topbar-btn-primary">
+        <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Nuevo curso
+    </a>
+@endsection
+
 @section('contenido')
 
-    <div style="display:flex; justify-content:flex-end; margin-bottom:1.5rem;">
-        <a href="{{ route('admin.cursos.create') }}"
-           style="background:#1E4D8C; color:white; padding:0.625rem 1.25rem; border-radius:0.5rem; font-size:0.875rem; text-decoration:none; font-weight:600;">
-            + Nuevo curso
-        </a>
-    </div>
-
-    <div style="background:white; border-radius:0.75rem; box-shadow:0 1px 3px rgba(0,0,0,.1); overflow:hidden;">
-        <table style="width:100%; border-collapse:collapse; font-size:0.875rem;">
-            <thead>
-                <tr style="background:#f9fafb; border-bottom:1px solid #e5e7eb;">
-                    <th style="padding:0.875rem 1rem; text-align:left; font-weight:600; color:#374151;">Título</th>
-                    <th style="padding:0.875rem 1rem; text-align:left; font-weight:600; color:#374151;">Categorías</th>
-                    <th style="padding:0.875rem 1rem; text-align:left; font-weight:600; color:#374151;">Modalidad</th>
-                    <th style="padding:0.875rem 1rem; text-align:left; font-weight:600; color:#374151;">Duración</th>
-                    <th style="padding:0.875rem 1rem; text-align:center; font-weight:600; color:#374151;">Visible</th>
-                    <th style="padding:0.875rem 1rem; text-align:right; font-weight:600; color:#374151;">Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                @forelse ($cursos as $curso)
-                    <tr style="border-bottom:1px solid #f3f4f6;">
-                        <td style="padding:0.875rem 1rem; color:#1f2937; font-weight:500;">
-                            {{ $curso->titulo }}
-                        </td>
-                        <td style="padding:0.875rem 1rem; color:#6b7280;">
-                            {{ $curso->categorias->pluck('nombre')->join(', ') ?: '—' }}
-                        </td>
-                        <td style="padding:0.875rem 1rem; color:#6b7280;">
-                            {{ $curso->modalidad ?: '—' }}
-                        </td>
-                        <td style="padding:0.875rem 1rem; color:#6b7280;">
-                            {{ $curso->duracion ?: '—' }}
-                        </td>
-                        <td style="padding:0.875rem 1rem; text-align:center;">
-                            <form method="POST" action="{{ route('admin.cursos.visibilidad', $curso) }}" style="display:inline;">
-                                @csrf @method('PATCH')
-                                <button type="submit"
-                                        style="padding:0.25rem 0.75rem; border-radius:9999px; font-size:0.75rem; font-weight:600; border:none; cursor:pointer;
-                                               background:{{ $curso->visible ? '#dcfce7' : '#fee2e2' }};
-                                               color:{{ $curso->visible ? '#15803d' : '#dc2626' }};">
-                                    {{ $curso->visible ? 'Sí' : 'No' }}
-                                </button>
-                            </form>
-                        </td>
-                        <td style="padding:0.875rem 1rem; text-align:right; white-space:nowrap;">
-                            <a href="{{ route('admin.cursos.edit', $curso) }}"
-                               style="color:#1E4D8C; font-weight:600; text-decoration:none; margin-right:1rem;">
-                                Editar
-                            </a>
-                            <form method="POST" action="{{ route('admin.cursos.destroy', $curso) }}" style="display:inline;"
-                                  onsubmit="return confirm('¿Eliminar este curso?')">
-                                @csrf @method('DELETE')
-                                <button type="submit"
-                                        style="color:#dc2626; font-weight:600; background:none; border:none; cursor:pointer; font-size:0.875rem;">
-                                    Eliminar
-                                </button>
-                            </form>
-                        </td>
-                    </tr>
-                @empty
+    <div class="card">
+        <div class="card-header">
+            <span class="card-title">Todos los cursos</span>
+            <span class="badge badge-gray">{{ $cursos->total() }} en total</span>
+        </div>
+        <div style="overflow-x:auto;">
+            <table class="data-table">
+                <thead>
                     <tr>
-                        <td colspan="6" style="padding:2rem; text-align:center; color:#6b7280;">
-                            No hay cursos registrados.
-                            <a href="{{ route('admin.cursos.create') }}" style="color:#1E4D8C; font-weight:600;">Crear el primero</a>
-                        </td>
+                        <th>Título</th>
+                        <th>Categorías</th>
+                        <th>Modalidad</th>
+                        <th>Duración</th>
+                        <th style="text-align:center;">Visible</th>
+                        <th style="text-align:right;">Acciones</th>
                     </tr>
-                @endforelse
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @forelse ($cursos as $curso)
+                        <tr>
+                            <td style="font-weight:600; color:#0f172a;">{{ $curso->titulo }}</td>
+                            <td>
+                                @forelse ($curso->categorias as $cat)
+                                    <span class="badge badge-blue">{{ $cat->nombre }}</span>
+                                @empty
+                                    <span style="color:#94a3b8; font-size:0.8rem;">—</span>
+                                @endforelse
+                            </td>
+                            <td>
+                                @if ($curso->modalidad)
+                                    <span class="badge badge-yellow">{{ $curso->modalidad }}</span>
+                                @else
+                                    <span style="color:#94a3b8; font-size:0.8rem;">—</span>
+                                @endif
+                            </td>
+                            <td style="color:#64748b; font-size:0.825rem;">{{ $curso->duracion ?: '—' }}</td>
+                            <td style="text-align:center;">
+                                <form method="POST" action="{{ route('admin.cursos.visibilidad', $curso) }}" style="display:inline;">
+                                    @csrf @method('PATCH')
+                                    <button type="submit" class="badge {{ $curso->visible ? 'badge-green' : 'badge-red' }}" style="border:none; cursor:pointer; font-family:inherit;">
+                                        {{ $curso->visible ? 'Sí' : 'No' }}
+                                    </button>
+                                </form>
+                            </td>
+                            <td style="text-align:right; white-space:nowrap;">
+                                <a href="{{ route('admin.cursos.edit', $curso) }}" class="btn btn-ghost btn-sm">
+                                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                                    Editar
+                                </a>
+                                <form method="POST" action="{{ route('admin.cursos.destroy', $curso) }}" style="display:inline;"
+                                      onsubmit="return confirm('¿Eliminar este curso?')">
+                                    @csrf @method('DELETE')
+                                    <button type="submit" class="btn btn-danger btn-sm">
+                                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 6l-1 14H6L5 6m5 0V4h4v2"/></svg>
+                                        Eliminar
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="6" style="padding:3rem; text-align:center; color:#94a3b8;">
+                                No hay cursos registrados.
+                                <a href="{{ route('admin.cursos.create') }}" style="color:#1E4D8C; font-weight:600; text-decoration:none;">Crear el primero →</a>
+                            </td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
     </div>
 
     @if ($cursos->hasPages())
-        <div style="margin-top:1.5rem;">
-            {{ $cursos->links() }}
-        </div>
+        <div style="margin-top:1.5rem;">{{ $cursos->links() }}</div>
     @endif
 
 @endsection

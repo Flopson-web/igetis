@@ -8,7 +8,8 @@
       "Bash(vendor/bin/pint app/Http/Controllers/Admin/CategoriaController.php --format agent)",
       "Bash(vendor/bin/pint app/Http/Controllers/Admin/ArticuloController.php --format agent)",
       "Bash(vendor/bin/pint app/Http/Controllers/Admin/MensajeController.php --format agent)",
-      "Bash(vendor/bin/pint app/Http/Controllers/Admin/ConfiguracionController.php --format agent)"
+      "Bash(vendor/bin/pint app/Http/Controllers/Admin/ConfiguracionController.php --format agent)",
+      "Bash(vendor/bin/pint *)"
     ]
   }
 }
