@@ -111,7 +111,7 @@
         }
         .topbar {
             background: white; height: 60px;
-            border-bottom: 1px solid #e2e8f0;
+            border-bottom: 2px solid #1E4D8C;
             display: flex; align-items: center; justify-content: space-between;
             padding: 0 1.5rem; position: sticky; top: 0; z-index: 100;
             gap: 0.75rem;
@@ -141,7 +141,7 @@
             white-space: nowrap;
         }
         .topbar-btn-primary { background: #1E4D8C; color: white; }
-        .topbar-btn-primary:hover { background: #153A6B; }
+        .topbar-btn-primary:hover { background: #F97316; }
         .page-body { padding: 2rem; flex: 1; }
 
         /* ── Alertas ─────────────────────────────────────────── */
@@ -241,7 +241,7 @@
         }
         .btn svg { width: 14px; height: 14px; flex-shrink: 0; }
         .btn-primary   { background: #1E4D8C; color: white; }
-        .btn-primary:hover   { background: #153A6B; }
+        .btn-primary:hover   { background: #F97316; }
         .btn-success   { background: #16a34a; color: white; }
         .btn-success:hover   { background: #15803d; }
         .btn-danger    { background: #fee2e2; color: #dc2626; }
@@ -259,8 +259,8 @@
             padding: 0.2rem 0.625rem; border-radius: 9999px;
             font-size: 0.7rem; font-weight: 700;
         }
-        .badge-blue    { background: #dbeafe; color: #1d4ed8; }
-        .badge-green   { background: #dcfce7; color: #15803d; }
+        .badge-blue    { background: #dbeafe; color: #1E4D8C; }
+        .badge-green   { background: #d1fae5; color: #065f46; }
         .badge-red     { background: #fee2e2; color: #dc2626; }
         .badge-yellow  { background: #fef9c3; color: #92400e; }
         .badge-gray    { background: #f1f5f9; color: #475569; }
