@@ -6,7 +6,7 @@
     <title>@yield('titulo', 'Panel Admin') — IGETIS</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@700;800;900&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     @vite(['resources/css/app.css'])
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -26,22 +26,23 @@
             background: #0f172a;
             display: flex; flex-direction: column;
             position: fixed; top: 0; left: 0; height: 100vh;
-            overflow-y: auto; z-index: 50;
+            overflow-y: auto; z-index: 200;
             border-right: 1px solid rgba(255,255,255,.05);
+            transition: transform 0.28s cubic-bezier(.4,0,.2,1);
         }
         .sidebar-logo {
-            padding: 1.5rem;
+            padding: 1.25rem 1.5rem;
             border-bottom: 1px solid rgba(255,255,255,.06);
             display: flex; align-items: center; gap: 0.75rem;
         }
-        .sidebar-logo-icon {
-            width: 38px; height: 38px; border-radius: 0.625rem;
-            background: linear-gradient(135deg, #1E4D8C, #2E6DB4);
-            display: flex; align-items: center; justify-content: center;
-            font-weight: 900; font-size: 0.875rem; color: white; flex-shrink: 0;
-        }
-        .sidebar-logo-text h1 { color: white; font-size: 1rem; font-weight: 800; letter-spacing: -0.3px; }
+        .sidebar-logo-text h1 { color: white; font-size: 1rem; font-weight: 800; letter-spacing: -0.02em; font-family: 'Figtree', system-ui, sans-serif; }
         .sidebar-logo-text p  { color: #64748b; font-size: 0.72rem; margin-top: 0.1rem; }
+        .sidebar-close {
+            margin-left: auto; display: none;
+            background: none; border: none; cursor: pointer;
+            color: #64748b; padding: 0.25rem;
+        }
+        .sidebar-close:hover { color: #e2e8f0; }
 
         .sidebar-section-label {
             font-size: 0.65rem; font-weight: 700; letter-spacing: 0.12em;
@@ -59,7 +60,7 @@
         .nav-item.active {
             background: rgba(30,77,140,.35);
             color: white; font-weight: 600;
-            border-left: 3px solid #2E6DB4;
+            border-left: 3px solid #F97316;
             padding-left: calc(0.875rem - 3px);
         }
         .nav-item svg { width: 17px; height: 17px; flex-shrink: 0; opacity: 0.8; }
@@ -94,29 +95,50 @@
         .logout-btn:hover { background: rgba(239,68,68,.12); color: #f87171; }
         .logout-btn svg { width: 15px; height: 15px; flex-shrink: 0; }
 
+        /* ── Overlay (mobile) ────────────────────────────────── */
+        .sidebar-overlay {
+            display: none; position: fixed; inset: 0;
+            background: rgba(0,0,0,.55); z-index: 190;
+            backdrop-filter: blur(2px);
+            -webkit-backdrop-filter: blur(2px);
+        }
+        .sidebar-overlay.visible { display: block; }
+
         /* ── Main ────────────────────────────────────────────── */
         .main-content {
             margin-left: 260px; flex: 1;
             display: flex; flex-direction: column; min-width: 0;
         }
         .topbar {
-            background: white; height: 64px;
+            background: white; height: 60px;
             border-bottom: 1px solid #e2e8f0;
             display: flex; align-items: center; justify-content: space-between;
-            padding: 0 2rem; position: sticky; top: 0; z-index: 40;
+            padding: 0 1.5rem; position: sticky; top: 0; z-index: 100;
+            gap: 0.75rem;
         }
-        .topbar-title { font-size: 1rem; font-weight: 700; color: #0f172a; }
-        .topbar-subtitle { font-size: 0.78rem; color: #94a3b8; margin-top: 0.1rem; }
-        .topbar-right { display: flex; align-items: center; gap: 0.875rem; }
-        .topbar-badge {
+        .topbar-left { display: flex; align-items: center; gap: 0.75rem; min-width: 0; }
+        .topbar-hamburger {
+            display: none; align-items: center; justify-content: center;
+            width: 36px; height: 36px; border-radius: 0.5rem;
+            background: #f1f5f9; border: none; cursor: pointer;
+            color: #475569; flex-shrink: 0; transition: background 0.15s;
+        }
+        .topbar-hamburger:hover { background: #e2e8f0; }
+        .topbar-titles { min-width: 0; }
+        .topbar-title { font-family: 'Figtree', system-ui, sans-serif; font-size: 0.95rem; font-weight: 700; color: #0f172a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .topbar-subtitle { font-size: 0.75rem; color: #94a3b8; margin-top: 0.05rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .topbar-right { display: flex; align-items: center; gap: 0.75rem; flex-shrink: 0; }
+        .topbar-date {
             display: flex; align-items: center; gap: 0.4rem;
-            font-size: 0.78rem; color: #64748b; font-weight: 500;
+            font-size: 0.78rem; color: #94a3b8; font-weight: 500;
+            white-space: nowrap;
         }
         .topbar-btn {
             display: flex; align-items: center; gap: 0.4rem;
             padding: 0.4rem 0.875rem; border-radius: 0.5rem;
             font-size: 0.8rem; font-weight: 600; text-decoration: none;
             transition: all 0.15s; border: none; cursor: pointer;
+            white-space: nowrap;
         }
         .topbar-btn-primary { background: #1E4D8C; color: white; }
         .topbar-btn-primary:hover { background: #153A6B; }
@@ -181,7 +203,7 @@
         .file-upload-area {
             border: 1.5px dashed #cbd5e1; border-radius: 0.625rem;
             padding: 1.5rem; text-align: center; cursor: pointer;
-            transition: all 0.2s; background: #f8fafc;
+            transition: all 0.2s; background: #f8fafc; display: block;
         }
         .file-upload-area:hover { border-color: #1E4D8C; background: #f0f7ff; }
 
@@ -256,35 +278,55 @@
             display: flex; align-items: center; justify-content: center; margin-bottom: 1rem;
         }
         .stat-icon svg { width: 22px; height: 22px; }
-        .stat-number { font-size: 2rem; font-weight: 900; color: #0f172a; line-height: 1; margin-bottom: 0.375rem; }
+        .stat-number { font-family: 'Figtree', system-ui, sans-serif; font-size: 2rem; font-weight: 900; color: #0f172a; line-height: 1; margin-bottom: 0.375rem; }
         .stat-label  { font-size: 0.82rem; color: #64748b; font-weight: 500; }
 
+        /* ── Mobile ──────────────────────────────────────────── */
         @media (max-width: 768px) {
-            .sidebar { transform: translateX(-100%); transition: transform 0.3s; }
+            .sidebar { transform: translateX(-100%); }
             .sidebar.open { transform: translateX(0); }
+            .sidebar-close { display: flex; align-items: center; justify-content: center; }
             .main-content { margin-left: 0; }
+            .topbar { padding: 0 1rem; height: 56px; }
+            .topbar-hamburger { display: flex; }
+            .topbar-date { display: none; }
+            .page-body { padding: 1rem; }
             .form-grid-2, .form-grid-3 { grid-template-columns: 1fr; }
+            .card-body { padding: 1rem; }
+            .card-header { padding: 1rem; }
+        }
+
+        @media (max-width: 480px) {
+            .topbar-subtitle { display: none; }
         }
     </style>
 </head>
 <body>
+
+{{-- Overlay (cerrar sidebar en mobile) --}}
+<div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>
+
 <div class="admin-wrapper">
 
     {{-- Sidebar --}}
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-logo">
-            <div class="sidebar-logo-icon">IG</div>
+            <img src="{{ asset('img/logos/Version en blanconegativo para el navbar oscuro .png') }}" alt="" style="height:28px; width:auto; flex-shrink:0;">
             <div class="sidebar-logo-text">
-                <h1>IGETIS</h1>
+                <h1>IGE<span style="color:#F97316">TIS</span></h1>
                 <p>Panel de gestión</p>
             </div>
+            <button class="sidebar-close" onclick="closeSidebar()" aria-label="Cerrar menú">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
         </div>
 
         <nav class="sidebar-nav">
             <p class="sidebar-section-label">Principal</p>
 
             <a href="{{ route('admin.dashboard') }}"
-               class="nav-item {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
+               class="nav-item {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}"
+               onclick="closeSidebar()">
                 <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
                 Dashboard
             </a>
@@ -292,25 +334,29 @@
             <p class="sidebar-section-label">Contenido</p>
 
             <a href="{{ route('admin.cursos.index') }}"
-               class="nav-item {{ request()->routeIs('admin.cursos.*') ? 'active' : '' }}">
+               class="nav-item {{ request()->routeIs('admin.cursos.*') ? 'active' : '' }}"
+               onclick="closeSidebar()">
                 <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
                 Cursos
             </a>
 
             <a href="{{ route('admin.articulos.index') }}"
-               class="nav-item {{ request()->routeIs('admin.articulos.*') ? 'active' : '' }}">
+               class="nav-item {{ request()->routeIs('admin.articulos.*') ? 'active' : '' }}"
+               onclick="closeSidebar()">
                 <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/></svg>
                 Blog / Artículos
             </a>
 
             <a href="{{ route('admin.categorias.index') }}"
-               class="nav-item {{ request()->routeIs('admin.categorias.*') ? 'active' : '' }}">
+               class="nav-item {{ request()->routeIs('admin.categorias.*') ? 'active' : '' }}"
+               onclick="closeSidebar()">
                 <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A2 2 0 013 12V7a4 4 0 014-4z"/></svg>
                 Categorías
             </a>
 
             <a href="{{ route('admin.docentes.index') }}"
-               class="nav-item {{ request()->routeIs('admin.docentes.*') ? 'active' : '' }}">
+               class="nav-item {{ request()->routeIs('admin.docentes.*') ? 'active' : '' }}"
+               onclick="closeSidebar()">
                 <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
                 Equipo docente
             </a>
@@ -318,7 +364,8 @@
             <p class="sidebar-section-label">Comunicación</p>
 
             <a href="{{ route('admin.mensajes.index') }}"
-               class="nav-item {{ request()->routeIs('admin.mensajes.*') ? 'active' : '' }}">
+               class="nav-item {{ request()->routeIs('admin.mensajes.*') ? 'active' : '' }}"
+               onclick="closeSidebar()">
                 <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
                 Mensajes
                 @php $noLeidos = \App\Models\Mensaje::where('leido', false)->count(); @endphp
@@ -330,13 +377,13 @@
             <p class="sidebar-section-label">Sistema</p>
 
             <a href="{{ route('admin.configuracion.index') }}"
-               class="nav-item {{ request()->routeIs('admin.configuracion.*') ? 'active' : '' }}">
+               class="nav-item {{ request()->routeIs('admin.configuracion.*') ? 'active' : '' }}"
+               onclick="closeSidebar()">
                 <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
                 Configuración
             </a>
 
-            <a href="{{ route('home') }}" target="_blank"
-               class="nav-item">
+            <a href="{{ route('home') }}" target="_blank" class="nav-item">
                 <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
                 Ver sitio web
             </a>
@@ -363,15 +410,25 @@
     {{-- Main --}}
     <div class="main-content">
         <header class="topbar">
-            <div>
-                <div class="topbar-title">@yield('titulo', 'Dashboard')</div>
-                @hasSection('subtitulo')
-                    <div class="topbar-subtitle">@yield('subtitulo')</div>
-                @endif
+            <div class="topbar-left">
+                {{-- Hamburger (solo mobile) --}}
+                <button class="topbar-hamburger" onclick="openSidebar()" aria-label="Abrir menú">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <line x1="3" y1="6" x2="21" y2="6"/>
+                        <line x1="3" y1="12" x2="21" y2="12"/>
+                        <line x1="3" y1="18" x2="21" y2="18"/>
+                    </svg>
+                </button>
+                <div class="topbar-titles">
+                    <div class="topbar-title">@yield('titulo', 'Dashboard')</div>
+                    @hasSection('subtitulo')
+                        <div class="topbar-subtitle">@yield('subtitulo')</div>
+                    @endif
+                </div>
             </div>
             <div class="topbar-right">
-                <span class="topbar-badge">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                <span class="topbar-date">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
                     {{ now()->format('d M Y') }}
                 </span>
                 @yield('topbar_action')
@@ -396,5 +453,22 @@
         </main>
     </div>
 </div>
+
+<script>
+    function openSidebar() {
+        document.getElementById('sidebar').classList.add('open');
+        document.getElementById('sidebar-overlay').classList.add('visible');
+        document.body.style.overflow = 'hidden';
+    }
+    function closeSidebar() {
+        document.getElementById('sidebar').classList.remove('open');
+        document.getElementById('sidebar-overlay').classList.remove('visible');
+        document.body.style.overflow = '';
+    }
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') closeSidebar();
+    });
+</script>
+
 </body>
 </html>
