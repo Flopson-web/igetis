@@ -9,7 +9,12 @@
       "Bash(vendor/bin/pint app/Http/Controllers/Admin/ArticuloController.php --format agent)",
       "Bash(vendor/bin/pint app/Http/Controllers/Admin/MensajeController.php --format agent)",
       "Bash(vendor/bin/pint app/Http/Controllers/Admin/ConfiguracionController.php --format agent)",
-      "Bash(vendor/bin/pint *)"
+      "Bash(vendor/bin/pint *)",
+      "Read(//c/Users/DELL/.claude/skills/ui-ux-pro-max/**)",
+      "Bash(python scripts/search.py \"healthcare education professional training institute Bolivia academic courses\" --design-system -p \"IGETIS\" -f markdown)",
+      "Bash(python scripts/search.py \"professional courses academic landing page hero section\" --design-system -p \"IGETIS\" -f markdown)",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)"
     ]
   }
 }

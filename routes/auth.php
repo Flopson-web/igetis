@@ -7,7 +7,7 @@ Route::get('gestion-interna/login', [AuthController::class, 'showLogin'])
     ->name('admin.login');
 
 Route::post('gestion-interna/login', [AuthController::class, 'login'])
-    ->middleware('throttle:5,1')
+    ->middleware('throttle:3,1')
     ->name('admin.login.post');
 
 Route::post('gestion-interna/logout', [AuthController::class, 'logout'])

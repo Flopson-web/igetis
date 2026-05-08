@@ -179,7 +179,11 @@
                         @if ($docente->foto)
                             <img src="{{ asset('storage/' . $docente->foto) }}" alt="{{ $docente->nombre }}">
                         @else
-                            <div class="docente-foto-placeholder">👤</div>
+                            <div class="docente-foto-placeholder">
+                                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.5)" stroke-width="1.5">
+                                    <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/>
+                                </svg>
+                            </div>
                         @endif
                     </div>
                     <div class="docente-body">
@@ -213,7 +217,7 @@
             <h2 class="section-title">Información de contacto</h2>
         </div>
 
-        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(min(100%,320px),1fr)); gap:2rem; align-items:start;">
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(min(100%,300px),1fr)); gap:2rem; align-items:start;">
 
             {{-- Info --}}
             <div>
@@ -287,25 +291,45 @@
                 @endif
             </div>
 
-            {{-- CTA contacto --}}
-            <div style="background:linear-gradient(135deg,#0f172a,#1E4D8C); border-radius:1.25rem; padding:2.5rem; text-align:center;">
-                <div style="font-size:3rem; margin-bottom:1rem;">💬</div>
-                <h3 style="font-size:1.25rem; font-weight:800; color:white; margin-bottom:0.75rem; line-height:1.3;">¿Tienes alguna pregunta?</h3>
-                <p style="color:rgba(255,255,255,.65); font-size:0.9rem; line-height:1.7; margin-bottom:2rem;">
-                    Nuestro equipo está disponible para orientarte sin compromiso sobre cualquier programa.
+            {{-- Mapa + CTA --}}
+            <div>
+                {{-- Google Maps embed --}}
+                <div style="border-radius:1.25rem; overflow:hidden; height:260px; margin-bottom:1.25rem; border:1px solid #e5e7eb; box-shadow:0 4px 16px rgba(0,0,0,.08);">
+                    <iframe
+                        src="https://maps.google.com/maps?q=Pasaje+San+Rafael+240+Cochabamba+Bolivia&output=embed&z=15"
+                        width="100%" height="100%" style="border:0;" loading="lazy"
+                        title="IGETIS — Pasaje San Rafael 240, Cochabamba, Bolivia"
+                        allowfullscreen>
+                    </iframe>
+                </div>
+                <p style="font-size:0.75rem; color:#9ca3af; text-align:center; margin-bottom:1.5rem;">
+                    Pasaje San Rafael N° 240, Cochabamba, Bolivia
                 </p>
-                <a href="{{ route('contacto.index') }}" class="btn btn-naranja" style="display:block; text-align:center; justify-content:center;">
-                    Contactar ahora
-                </a>
-                @if ($config['whatsapp'])
-                    <a href="https://wa.me/{{ $config['whatsapp'] }}?text={{ rawurlencode('Hola, me gustaría recibir información sobre los cursos de IGETIS.') }}"
-                       target="_blank" rel="noopener"
-                       style="display:block; margin-top:0.875rem; font-size:0.82rem; color:rgba(255,255,255,.6); text-decoration:none; transition:color 0.2s;"
-                       onmouseover="this.style.color='rgba(255,255,255,1)'"
-                       onmouseout="this.style.color='rgba(255,255,255,.6)'">
-                        o escríbenos por WhatsApp →
+
+                {{-- CTA --}}
+                <div style="background:linear-gradient(135deg,#0f172a,#1E4D8C); border-radius:1.25rem; padding:2rem; text-align:center;">
+                    <div style="width:48px; height:48px; border-radius:0.875rem; background:rgba(249,115,22,.18); display:flex; align-items:center; justify-content:center; margin:0 auto 1rem;">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fb923c" stroke-width="2">
+                            <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
+                        </svg>
+                    </div>
+                    <h3 style="font-size:1.125rem; font-weight:800; color:white; margin-bottom:0.625rem; line-height:1.3;">¿Tienes alguna pregunta?</h3>
+                    <p style="color:rgba(255,255,255,.6); font-size:0.85rem; line-height:1.7; margin-bottom:1.5rem;">
+                        Nuestro equipo está disponible para orientarte sin compromiso sobre cualquier programa.
+                    </p>
+                    <a href="{{ route('contacto.index') }}" class="btn btn-naranja" style="display:block; text-align:center; justify-content:center;">
+                        Contactar ahora
                     </a>
-                @endif
+                    @if ($config['whatsapp'])
+                        <a href="https://wa.me/{{ $config['whatsapp'] }}?text={{ rawurlencode('Hola, me gustaría recibir información sobre los cursos de IGETIS.') }}"
+                           target="_blank" rel="noopener"
+                           style="display:block; margin-top:0.75rem; font-size:0.8rem; color:rgba(255,255,255,.55); text-decoration:none; transition:color 0.2s;"
+                           onmouseover="this.style.color='rgba(255,255,255,1)'"
+                           onmouseout="this.style.color='rgba(255,255,255,.55)'">
+                            o escríbenos por WhatsApp →
+                        </a>
+                    @endif
+                </div>
             </div>
         </div>
     </div>

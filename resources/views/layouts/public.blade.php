@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('titulo', 'IGETIS') — Instituto de Gestión y Tecnología</title>
-    <meta name="description" content="@yield('descripcion', 'IGETIS - Formación profesional en gestión y tecnología')">
+    <title>@yield('titulo', 'IGETIS') — Capacitación Profesional en Salud</title>
+    <meta name="description" content="@yield('descripcion', 'IGETIS — Capacitación y desarrollo profesional especializado en salud y áreas afines. Cochabamba, Bolivia.')">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="{{ asset('img/logos/Favicon.png') }}">
     @vite(['resources/css/app.css'])
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -17,6 +18,9 @@
             background: #f8fafc;
             color: #1f2937;
             -webkit-font-smoothing: antialiased;
+        }
+        h1, h2, h3, h4, .section-title, .hero-title, .stat-num, .float-val {
+            font-family: 'Figtree', system-ui, -apple-system, sans-serif;
         }
 
         /* ── Variables ──────────────────────────────────────── */
@@ -57,13 +61,26 @@
             justify-content: space-between;
         }
         .navbar-brand {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.625rem;
+            text-decoration: none;
+            flex-shrink: 0;
+        }
+        .navbar-brand img {
+            height: 38px;
+            width: auto;
+            display: block;
+        }
+        .navbar-brand-text {
+            font-family: 'Figtree', system-ui, sans-serif;
             font-size: 1.5rem;
             font-weight: 900;
             color: white;
-            text-decoration: none;
-            letter-spacing: -1px;
+            letter-spacing: -0.04em;
+            line-height: 1;
         }
-        .navbar-brand span { color: var(--naranja); }
+        .navbar-brand-text span { color: var(--naranja); }
         .navbar-menu { display: flex; align-items: center; gap: 0.25rem; }
         .navbar-link {
             color: rgba(255,255,255,.85);
@@ -229,8 +246,22 @@
             max-width: 1200px; margin: 0 auto;
             display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 3rem;
         }
-        .footer-brand-name { font-size: 1.5rem; font-weight: 900; color: white; letter-spacing: -0.5px; margin-bottom: 0.75rem; }
-        .footer-brand-name span { color: var(--naranja); }
+        .footer-brand-logo {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.625rem;
+            margin-bottom: 0.875rem;
+        }
+        .footer-brand-logo img { height: 36px; width: auto; }
+        .footer-brand-logo-text {
+            font-family: 'Figtree', system-ui, sans-serif;
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: white;
+            letter-spacing: -0.04em;
+            line-height: 1;
+        }
+        .footer-brand-logo-text span { color: var(--naranja); }
         .footer-desc { font-size: 0.875rem; line-height: 1.7; max-width: 280px; }
         .footer-col-title { color: white; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 1.25rem; }
         .footer-links-list { list-style: none; display: flex; flex-direction: column; gap: 0.625rem; }
@@ -281,7 +312,10 @@
 
     <nav class="navbar {{ request()->routeIs('home') ? 'transparent' : 'solid' }}" id="navbar">
         <div class="navbar-inner">
-            <a href="{{ route('home') }}" class="navbar-brand">IGE<span>TIS</span></a>
+            <a href="{{ route('home') }}" class="navbar-brand">
+                <img src="{{ asset('img/logos/Version en blanconegativo para el navbar oscuro .png') }}" alt="">
+                <span class="navbar-brand-text">IGE<span>TIS</span></span>
+            </a>
 
             <button class="navbar-toggle" id="nav-toggle" aria-label="Menú" aria-expanded="false">
                 <span></span><span></span><span></span>
@@ -348,8 +382,11 @@
         <div class="footer-top">
             <div class="footer-grid">
                 <div>
-                    <div class="footer-brand-name">IGE<span>TIS</span></div>
-                    <p class="footer-desc">Formación profesional en gestión y tecnología para profesionales que quieren avanzar en su carrera.</p>
+                    <div class="footer-brand-logo">
+                        <img src="{{ asset('img/logos/Version en blanconegativo para el navbar oscuro .png') }}" alt="">
+                        <span class="footer-brand-logo-text">IGE<span>TIS</span></span>
+                    </div>
+                    <p class="footer-desc">Capacitación y desarrollo profesional especializado en salud y áreas afines. Cochabamba, Bolivia.</p>
                 </div>
                 <div>
                     <div class="footer-col-title">Navegación</div>
@@ -364,12 +401,26 @@
                 <div>
                     <div class="footer-col-title">Contacto</div>
                     <ul class="footer-links-list">
-                        @php $footerEmail = \App\Models\Configuracion::get('email',''); @endphp
+                        @php
+                            $footerEmail    = \App\Models\Configuracion::get('email','');
+                            $footerTelefono = \App\Models\Configuracion::get('telefono','');
+                            $footerDir      = \App\Models\Configuracion::get('direccion','');
+                            $footerFb       = \App\Models\Configuracion::get('facebook','');
+                        @endphp
+                        @if ($footerDir)
+                            <li style="font-size:0.82rem; line-height:1.6; color:#64748b;">{{ $footerDir }}</li>
+                        @endif
+                        @if ($footerTelefono)
+                            <li><a href="tel:{{ $footerTelefono }}">{{ $footerTelefono }}</a></li>
+                        @endif
                         @if ($footerEmail)
-                            <li><a href="mailto:{{ $footerEmail }}">{{ $footerEmail }}</a></li>
+                            <li><a href="mailto:{{ $footerEmail }}" style="word-break:break-all;">{{ $footerEmail }}</a></li>
                         @endif
                         @if ($waNumero)
                             <li><a href="https://wa.me/{{ $waNumero }}" target="_blank">WhatsApp</a></li>
+                        @endif
+                        @if ($footerFb)
+                            <li><a href="{{ $footerFb }}" target="_blank" rel="noopener">Facebook</a></li>
                         @endif
                     </ul>
                 </div>
@@ -413,5 +464,6 @@
         }
     </script>
 
+    @stack('scripts')
 </body>
 </html>

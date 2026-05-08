@@ -16,6 +16,7 @@ class ConfiguracionController extends Controller
         'whatsapp_numero' => ['label' => 'WhatsApp (número)',       'type' => 'text'],
         'direccion' => ['label' => 'Dirección',               'type' => 'text'],
         'horario' => ['label' => 'Horario de atención',     'type' => 'text'],
+        'hero_texto' => ['label' => 'Texto del Hero (inicio)',  'type' => 'textarea'],
         'descripcion_sitio' => ['label' => 'Descripción del sitio',   'type' => 'textarea'],
         'mision' => ['label' => 'Misión',                  'type' => 'textarea'],
         'vision' => ['label' => 'Visión',                  'type' => 'textarea'],

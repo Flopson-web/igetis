@@ -22,7 +22,7 @@ Route::get('/blog', [BlogController::class,     'index'])->name('blog.index');
 Route::get('/blog/{slug}', [BlogController::class,     'show'])->name('blog.show');
 Route::get('/nosotros', [NosotrosController::class, 'index'])->name('nosotros.index');
 Route::get('/contacto', [ContactoController::class, 'index'])->name('contacto.index');
-Route::post('/contacto', [ContactoController::class, 'store'])->name('contacto.store');
+Route::post('/contacto', [ContactoController::class, 'store'])->name('contacto.store')->middleware('throttle:3,60');
 
 // ── Panel Admin (protegido) ──────────────────────────────────
 Route::middleware(['auth'])->prefix('gestion-interna')->name('admin.')->group(function () {

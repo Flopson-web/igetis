@@ -59,7 +59,11 @@
                         @if ($articulo->imagen)
                             <img src="{{ asset('storage/' . $articulo->imagen) }}" alt="{{ $articulo->titulo }}">
                         @else
-                            <div style="height:200px; background:linear-gradient(135deg,#F97316,#EA6C0A); display:flex; align-items:center; justify-content:center; font-size:3.5rem;">✍️</div>
+                            <div style="height:200px; background:linear-gradient(135deg,#F97316,#EA6C0A); display:flex; align-items:center; justify-content:center;">
+                                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.5)" stroke-width="1.5">
+                                    <path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                                </svg>
+                            </div>
                         @endif
                     </div>
                     <div style="padding:1.5rem; flex:1; display:flex; flex-direction:column;">
@@ -80,7 +84,9 @@
             @if ($loop->last) </div> @endif
         @empty
             <div style="text-align:center; padding:4rem 2rem; background:white; border-radius:1rem; border:1.5px dashed #e5e7eb;">
-                <div style="font-size:3.5rem; margin-bottom:1rem;">📭</div>
+                <div style="width:56px; height:56px; background:#EFF6FF; border-radius:1rem; display:flex; align-items:center; justify-content:center; margin:0 auto 1.25rem;">
+                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#1d4ed8" stroke-width="2"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                </div>
                 <p style="color:#6b7280; margin-bottom:{{ request('buscar') ? '1.5rem' : '0' }};">
                     {{ request('buscar') ? 'No se encontraron artículos.' : 'Aún no hay artículos publicados.' }}
                 </p>

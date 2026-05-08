@@ -11,9 +11,9 @@ use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
-    private const MAX_ATTEMPTS = 5;
+    private const MAX_ATTEMPTS = 3;
 
-    private const DECAY_MINUTES = 1;
+    private const DECAY_MINUTES = 20;
 
     public function showLogin()
     {
@@ -26,6 +26,12 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
+        if ($request->filled('_business_url')) {
+            throw ValidationException::withMessages([
+                'email' => 'Las credenciales no son correctas.',
+            ]);
+        }
+
         $request->validate([
             'email' => ['required', 'email'],
             'password' => ['required', 'string'],
@@ -35,9 +41,11 @@ class AuthController extends Controller
 
         if (RateLimiter::tooManyAttempts($key, self::MAX_ATTEMPTS)) {
             $seconds = RateLimiter::availableIn($key);
+            $minutes = (int) ceil($seconds / 60);
+            $label = $minutes === 1 ? 'minuto' : 'minutos';
 
             throw ValidationException::withMessages([
-                'email' => "Demasiados intentos. Por favor espera {$seconds} segundos.",
+                'email' => "Demasiados intentos fallidos. Intenta de nuevo en {$minutes} {$label}.",
             ]);
         }
 

@@ -7,6 +7,35 @@
 
     @php $noLeidos = $mensajes->where('leido', false)->count(); @endphp
 
+    {{-- Filtros --}}
+    <div style="background:white; border-radius:0.875rem; padding:1.25rem 1.5rem; box-shadow:0 1px 3px rgba(0,0,0,.06); margin-bottom:1.5rem; display:flex; flex-wrap:wrap; gap:1rem; align-items:flex-end;">
+        <div style="display:flex; gap:0.5rem; flex-wrap:wrap; align-items:center;">
+            <span style="font-size:0.78rem; font-weight:600; color:#64748b; white-space:nowrap;">Filtrar por:</span>
+            @foreach(['hoy' => 'Hoy', 'semana' => 'Esta semana', 'mes' => 'Este mes'] as $val => $label)
+                <a href="{{ route('admin.mensajes.index', ['filtro' => $val]) }}"
+                   style="padding:0.4rem 0.875rem; border-radius:0.5rem; font-size:0.8rem; font-weight:600; text-decoration:none; transition:all 0.15s;
+                          {{ $filtro === $val ? 'background:#1E4D8C; color:white;' : 'background:#f1f5f9; color:#475569;' }}">
+                    {{ $label }}
+                </a>
+            @endforeach
+            @if($filtro)
+                <a href="{{ route('admin.mensajes.index') }}"
+                   style="padding:0.4rem 0.875rem; border-radius:0.5rem; font-size:0.8rem; font-weight:600; text-decoration:none; background:#fee2e2; color:#dc2626; transition:all 0.15s;">
+                    Limpiar
+                </a>
+            @endif
+        </div>
+
+        <form method="GET" action="{{ route('admin.mensajes.index') }}" style="display:flex; gap:0.5rem; flex-wrap:wrap; align-items:center; margin-left:auto;">
+            <input type="date" name="desde" value="{{ request('desde') }}"
+                   style="padding:0.4rem 0.75rem; border:1.5px solid #e2e8f0; border-radius:0.5rem; font-size:0.8rem; font-family:inherit; outline:none; color:#374151;">
+            <span style="font-size:0.78rem; color:#94a3b8; font-weight:500;">hasta</span>
+            <input type="date" name="hasta" value="{{ request('hasta') }}"
+                   style="padding:0.4rem 0.75rem; border:1.5px solid #e2e8f0; border-radius:0.5rem; font-size:0.8rem; font-family:inherit; outline:none; color:#374151;">
+            <button type="submit" class="btn btn-primary btn-sm">Buscar</button>
+        </form>
+    </div>
+
     @if ($noLeidos > 0)
         <div class="alert" style="background:#eff6ff; border-color:#bfdbfe; color:#1d4ed8; margin-bottom:1.5rem;">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0;margin-top:1px"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>

@@ -68,8 +68,15 @@
                     <h2 style="font-size:1.375rem; font-weight:800; color:#111827; margin-bottom:0.375rem;">Envíanos un mensaje</h2>
                     <p style="color:#6b7280; font-size:0.875rem; margin-bottom:2rem; line-height:1.6;">Te responderemos lo antes posible.</p>
 
-                    <form method="POST" action="{{ route('contacto.store') }}" style="display:flex; flex-direction:column; gap:1.25rem;">
+                    <form method="POST" action="{{ route('contacto.store') }}" style="display:flex; flex-direction:column; gap:1.25rem;" id="contacto-form">
                         @csrf
+                        {{-- honeypot: invisible para humanos, los bots lo llenan --}}
+                        <div style="position:absolute;left:-9999px;top:-9999px;opacity:0;pointer-events:none;" aria-hidden="true">
+                            <input type="text" name="_website_url" value="" tabindex="-1" autocomplete="off">
+                        </div>
+                        @if(config('services.recaptcha.site_key'))
+                            <input type="hidden" name="recaptcha_token" id="recaptcha_token">
+                        @endif
                         <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(min(100%,200px),1fr)); gap:1.25rem;">
                             <div class="input-group">
                                 <label class="input-label">Nombre *</label>
@@ -189,4 +196,23 @@
         </div>
     </div>
 </section>
+@if(config('services.recaptcha.site_key'))
+@push('scripts')
+<script src="https://www.google.com/recaptcha/api.js?render={{ config('services.recaptcha.site_key') }}"></script>
+<script>
+grecaptcha.ready(function () {
+    document.getElementById('contacto-form').addEventListener('submit', function (e) {
+        e.preventDefault();
+        var form = this;
+        grecaptcha.execute('{{ config('services.recaptcha.site_key') }}', { action: 'contacto' })
+            .then(function (token) {
+                document.getElementById('recaptcha_token').value = token;
+                form.submit();
+            });
+    });
+});
+</script>
+@endpush
+@endif
+
 @endsection

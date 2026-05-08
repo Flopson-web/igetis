@@ -76,11 +76,16 @@
                 </div>
 
                 {{-- CTA lateral --}}
-                <div style="background:linear-gradient(135deg,var(--azul),var(--azul-dark)); border-radius:1rem; padding:1.5rem; text-align:center;">
-                    <div style="font-size:2rem; margin-bottom:0.75rem;">🎓</div>
-                    <p style="color:white; font-weight:700; font-size:0.95rem; margin-bottom:0.5rem;">¿No encuentras lo que buscas?</p>
-                    <p style="color:rgba(255,255,255,.7); font-size:0.8rem; margin-bottom:1.25rem; line-height:1.5;">Contáctanos y te orientamos.</p>
-                    <a href="{{ route('contacto.index') }}" class="btn btn-naranja" style="display:block; text-align:center; font-size:0.875rem; padding:0.625rem;">Contactar</a>
+                <div style="background:linear-gradient(135deg, #1E4D8C 0%, #153A6B 100%); border-radius:1rem; padding:1.75rem 1.5rem; text-align:center;">
+                    <div style="width:44px; height:44px; background:rgba(255,255,255,.12); border-radius:0.75rem; display:flex; align-items:center; justify-content:center; margin:0 auto 1rem;">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+                    </div>
+                    <p style="color:white; font-weight:700; font-size:0.9rem; margin-bottom:0.5rem; line-height:1.4;">¿No encuentras lo que buscas?</p>
+                    <p style="color:rgba(255,255,255,.65); font-size:0.78rem; margin-bottom:1.25rem; line-height:1.6;">Contáctanos y te asesoramos sin compromiso.</p>
+                    <a href="{{ route('contacto.index') }}" style="display:block; text-align:center; background:#F97316; color:white; font-size:0.825rem; font-weight:700; padding:0.625rem 1rem; border-radius:0.5rem; text-decoration:none; transition:background 0.2s;"
+                       onmouseover="this.style.background='#EA6C0A'" onmouseout="this.style.background='#F97316'">
+                        Contactar ahora
+                    </a>
                 </div>
             </aside>
 
@@ -113,11 +118,19 @@
                             @if ($curso->imagen)
                                 <img src="{{ asset('storage/' . $curso->imagen) }}" alt="{{ $curso->titulo }}">
                             @else
-                                <div class="course-img-placeholder" style="background:linear-gradient(135deg,#1E4D8C,#2E6DB4);">📚</div>
+                                <div class="course-img-placeholder" style="background:linear-gradient(135deg,#1E4D8C,#2E6DB4); display:flex; align-items:center; justify-content:center;">
+                                    <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.5)" stroke-width="1.5">
+                                        <path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+                                    </svg>
+                                </div>
                             @endif
-                            @if ($curso->modalidad)
-                                <span style="position:absolute; top:0.875rem; left:0.875rem;" class="badge badge-naranja">{{ $curso->modalidad }}</span>
-                            @endif
+                            <div style="position:absolute; top:0.875rem; left:0.875rem; display:flex; gap:0.4rem; flex-wrap:wrap;">
+                                @if ($curso->tipo)
+                                    <span class="badge badge-naranja">{{ $curso->tipo }}</span>
+                                @elseif ($curso->modalidad)
+                                    <span class="badge badge-naranja">{{ $curso->modalidad }}</span>
+                                @endif
+                            </div>
                         </div>
                         <div class="course-body">
                             <div style="display:flex; gap:0.4rem; flex-wrap:wrap; margin-bottom:0.75rem;">
@@ -127,12 +140,24 @@
                             </div>
                             <h3 style="font-size:1rem; font-weight:700; color:#111827; margin-bottom:0.5rem; line-height:1.4;">{{ $curso->titulo }}</h3>
                             <p style="font-size:0.875rem; color:#6b7280; line-height:1.65; flex:1; margin-bottom:1rem;">{{ Str::limit($curso->descripcion, 100) }}</p>
-                            @if ($curso->duracion)
-                                <div style="display:flex; align-items:center; gap:0.4rem; font-size:0.8rem; color:#9ca3af; margin-bottom:1rem;">
-                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                                    {{ $curso->duracion }}
-                                </div>
-                            @endif
+                            <div style="display:flex; flex-wrap:wrap; gap:0.75rem; margin-bottom:1rem;">
+                                @if ($curso->fecha_inicio)
+                                    <div style="display:flex; align-items:center; gap:0.35rem; font-size:0.78rem; color:#1E4D8C; font-weight:600;">
+                                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                                        @if ($curso->fecha_fin && !$curso->fecha_inicio->equalTo($curso->fecha_fin))
+                                            {{ $curso->fecha_inicio->translatedFormat('d') }}-{{ $curso->fecha_fin->translatedFormat('d M Y') }}
+                                        @else
+                                            {{ $curso->fecha_inicio->translatedFormat('d M Y') }}
+                                        @endif
+                                    </div>
+                                @endif
+                                @if ($curso->duracion)
+                                    <div style="display:flex; align-items:center; gap:0.35rem; font-size:0.78rem; color:#9ca3af;">
+                                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                                        {{ $curso->duracion }}
+                                    </div>
+                                @endif
+                            </div>
                             <a href="{{ route('cursos.show', $curso->slug) }}" class="btn btn-primary" style="justify-content:center; width:100%;">Ver curso</a>
                         </div>
                     </div>
@@ -140,7 +165,9 @@
                     @if ($loop->last) </div> @endif
                 @empty
                     <div style="text-align:center; padding:4rem 2rem; background:white; border-radius:1rem; border:1.5px dashed #e5e7eb;">
-                        <div style="font-size:3.5rem; margin-bottom:1rem;">🔍</div>
+                        <div style="width:56px; height:56px; background:#EFF6FF; border-radius:1rem; display:flex; align-items:center; justify-content:center; margin:0 auto 1.25rem;">
+                            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#1d4ed8" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                        </div>
                         <p style="color:#6b7280; margin-bottom:1.5rem;">No se encontraron cursos con esos criterios.</p>
                         <a href="{{ route('cursos.index') }}" class="btn btn-primary">Ver todos</a>
                     </div>
